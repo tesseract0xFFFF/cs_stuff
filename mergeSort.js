@@ -54,11 +54,11 @@ function merge(arr1, arr2){
 }
 
 
-const arrTest = [100, 5, 4, 9, 400, 11, 2, 90];
+// // const arrTest = [100, 5, 4, 9, 400, 11, 2, 90];
 
-const mergeSortResult = mergeSort(arrTest);
+// const mergeSortResult = mergeSort(arrTest);
 
-console.log(mergeSortResult);
+// console.log(mergeSortResult);
 
 
 
@@ -84,3 +84,7 @@ console.log(mergeSortResult);
 
 // const mergedArr = merge(arrTest1, arrTest2);
 // console.log(mergedArr);
+
+
+
+export {mergeSort, merge};
