@@ -1,5 +1,9 @@
 import {mergeSort, merge} from "./mergeSort.js";
 
+function printSomething(a){
+    console.log(a);
+}
+
 
 class Node {
 
@@ -16,6 +20,8 @@ class Tree {
 
     constructor (array){
        this.root;
+       this.queue = [];
+       this.levelOrderNoFunction = [];
        this.array = array;
        this.noDuplicates = [...new Set(this.array)];
        this.sortedArray = mergeSort(this.noDuplicates);
@@ -104,6 +110,7 @@ class Tree {
             }
             // if succesorParent's left child is null:
             // takes its right child and assigns it as its parent's left child.
+            // (treats it as a single child case).
             // copies successor's data to the node we want to 'delete'
             // deletes the successor and returns the root.
 
@@ -112,7 +119,7 @@ class Tree {
             }
             // if the succesor's parent is root 
             // (in case there was no left branch after going first right), the right child is the succesor.
-            // int that case, i will have to copy its value into the root and then replace it with its right branch.
+            // in that case, i will have to copy its value into the root and then replace it with its right branch.
             else{
                 successorParent.right = successor.right;
             }
@@ -126,9 +133,59 @@ class Tree {
 
 
     }
+
+    find(root, value){
+
+        if(root === null){
+            console.log(`value "${value}" not found!`);
+            return root; 
+        }
+
+        if(root.data > value){
+            root.left = this.find(root.left, value);
+            return root;
+        }
+
+        if(root.data < value){
+            root.right = this.find(root.right, value);
+            return root;
+        }
+
+        if (root.data === value){
+            console.log(root);
+            return root;
+        }
+    }
+
+    levelOrder(node, f){
+        if(node === null){
+            return;
+        }
+
+        if (arguments[1] === undefined){
+            this.levelOrderNoFunction.push(node.data); 
+        }
+
+        else{
+        f(node.data);
+        }
+
+        if(node.left !== null){
+            this.queue.push(node.left);
+        }
+
+        if(node.right !== null){
+            this.queue.push(node.right);
+        }
+
+        if(this.queue.length !== 0){
+            this.levelOrder(this.queue.shift(), f);
+        }
+
+        return this.levelOrderNoFunction;
+    }
     
 }
-
 
 
 const prettyPrint = (node, prefix = "", isLeft = true) => {
@@ -145,6 +202,34 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
   };
   
 
+  const arrNotSorted = [4, 100, 1, 7, 0, 3, 15, 13, 8, 22];
+
+  const tree1 = new Tree(arrNotSorted);
+  
+  const bst1 = tree1.buildTree(0, (tree1.sortedArray.length - 1));
+  
+  const lvl1 = tree1.levelOrder(bst1);
+
+  console.log(lvl1);
+  
+//   tree1.find(bst1, 15);
+
+//   const insert1 = tree1.insert(bst1, 16);
+  
+//   const delete1 = tree1.delete(bst1, 1);
+  
+  prettyPrint(bst1);
+  
+//   console.log(tree1.sortedArray);
+
+
+
+
+
+
+
+
+
 
 
 
@@ -157,20 +242,23 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
 
 // console.log(mergeSortResult);
 
-const arrNotSorted = [4, 100, 1, 7, 0, 3, 15, 13, 8, 22];
+// const arrNotSorted = [4, 100, 1, 7, 0, 3, 15, 13, 8, 22];
 
-const tree1 = new Tree(arrNotSorted);
+// const tree1 = new Tree(arrNotSorted);
 
-const bst1 = tree1.buildTree(0, (tree1.sortedArray.length - 1));
+// const bst1 = tree1.buildTree(0, (tree1.sortedArray.length - 1));
 
-// const insert1 = tree1.insert(bst1, 6);
+// tree1.find(bst1, 22);
 
-// not sure if working yet.
-const delete1 = tree1.delete(bst1, 1);
+// console.log(bst1);
+// // const insert1 = tree1.insert(bst1, 6);
 
-prettyPrint(delete1);
+// // not sure if working yet.
+// // const delete1 = tree1.delete(bst1, 1);
 
-console.log(tree1.sortedArray);
+// prettyPrint(bst1);
+
+// // console.log(tree1.sortedArray);
 
 
 
