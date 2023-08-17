@@ -20,11 +20,18 @@ class Tree {
 
     constructor (array){
        this.root;
+        // the levelOrder queue.    
        this.queue = [];
+        // levelOrder will return an array in case a 2nd argument is not provided.
        this.levelOrderNoFunction = [];
        this.array = array;
        this.noDuplicates = [...new Set(this.array)];
        this.sortedArray = mergeSort(this.noDuplicates);
+       this.inorderArray = [];
+       this.preOrderArray = [];
+       this.postOrderrArray = [];
+       this.heightValue = -1;
+       this.depthValue = -1;
     }
 
     buildTree(start, end){
@@ -184,7 +191,80 @@ class Tree {
 
         return this.levelOrderNoFunction;
     }
+
+    inOrder(node){
+
+        if (node === null){
+            return;
+        }
+        this.inOrder(node.left);
+        this.inorderArray.push(node.data);
+        this.inOrder(node.right);
+    }
+
+    preOrder(node){
+
+        if (node === null){
+            return;
+        }
+        this.preOrderArray.push(node.data);
+        this.preOrder(node.left);
+        this.preOrder(node.right);
+    }
     
+    postOrder(node){
+
+        if (node === null){
+            return;
+        }
+        this.postOrder(node.left);
+        this.postOrder(node.right);
+        this.postOrderrArray.push(node.data);
+    }
+
+
+    height(node, value){
+
+        if(node === null){
+            return -1;
+        }
+
+        const heightL = this.height(node.left, value); 
+        const heightR = this.height(node.right, value);
+
+        // current subtree height.
+        const largerValue = Math.max(heightL, heightR) + 1;
+        
+        if(node.data === value){
+            this.heightValue = largerValue;
+            console.log(`Node height:${this.heightValue}`);
+            return largerValue; 
+        }
+
+        return largerValue
+    }
+    
+    depth(node, value){
+
+        if (node === null){
+            return;
+        }
+
+        if (node.data > value){
+            this.depthValue += 1;
+            this.depth(node.left, value);
+        }
+
+        if(node.data < value){
+            this.depthValue += 1;
+            this.depth(node.right, value);
+        }
+
+        if(node.data === value){
+            this.depthValue += 1;
+            console.log(`Node depth: ${this.depthValue}`);
+        }
+    }
 }
 
 
@@ -207,10 +287,18 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
   const tree1 = new Tree(arrNotSorted);
   
   const bst1 = tree1.buildTree(0, (tree1.sortedArray.length - 1));
-  
-  const lvl1 = tree1.levelOrder(bst1);
 
-  console.log(lvl1);
+//   tree1.postOrder(bst1);
+
+tree1.depth(bst1, 3);
+tree1.height(bst1, 7);
+console.log()
+//   console.log(tree1.postOrderrArray);
+  prettyPrint(bst1);
+  
+//   const lvl1 = tree1.levelOrder(bst1);
+
+//   console.log(lvl1);
   
 //   tree1.find(bst1, 15);
 
@@ -218,7 +306,7 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
   
 //   const delete1 = tree1.delete(bst1, 1);
   
-  prettyPrint(bst1);
+
   
 //   console.log(tree1.sortedArray);
 
