@@ -265,6 +265,36 @@ class Tree {
             console.log(`Node depth: ${this.depthValue}`);
         }
     }
+
+    isBalanced(node){
+
+        if(node === null){
+            return -1;
+        }
+
+        const heightL = this.isBalanced(node.left); 
+        const heightR = this.isBalanced(node.right);
+        const check = Math.abs(heightL - heightR);
+
+        if(check > 1){
+            console.log(`Difference in heights is: ${check}, tree is not balanced`);
+            return;
+        }
+
+        // current subtree height.
+        const largerValue = Math.max(heightL, heightR) + 1;
+
+        return largerValue;
+    }
+
+    rebalance(node){
+        this.inOrder(node);
+        // will create a new tree based on the node provided and results stored in current tree. 
+        // inOrder function results are stored in this.inorderArray
+        const newTree = new Tree(this.inorderArray);
+        const newTreeBlanced = newTree.buildTree(0, (newTree.sortedArray.length - 1));
+        return newTreeBlanced;
+    }
 }
 
 
@@ -288,13 +318,26 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
   
   const bst1 = tree1.buildTree(0, (tree1.sortedArray.length - 1));
 
+  const insert1 = tree1.insert(bst1, 101);
+  const insert2 = tree1.insert(bst1, 102);
+  const insert3 = tree1.insert(bst1, 103);
+  
+  const rebalancedTree = tree1.rebalance(bst1);
+
+//   tree1.inOrder(bst1);  
+
+//   tree1.isBalanced(bst1);
+  tree1.isBalanced(rebalancedTree);
+
+
 //   tree1.postOrder(bst1);
 
-tree1.depth(bst1, 3);
-tree1.height(bst1, 7);
-console.log()
+// tree1.depth(bst1, 3);
+// tree1.height(bst1, 3);
 //   console.log(tree1.postOrderrArray);
   prettyPrint(bst1);
+  prettyPrint(rebalancedTree);
+
   
 //   const lvl1 = tree1.levelOrder(bst1);
 
@@ -302,7 +345,6 @@ console.log()
   
 //   tree1.find(bst1, 15);
 
-//   const insert1 = tree1.insert(bst1, 16);
   
 //   const delete1 = tree1.delete(bst1, 1);
   
